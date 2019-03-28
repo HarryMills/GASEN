@@ -9,8 +9,7 @@ import pandas as pd
 import numpy as np
 import sklearn
 from sklearn import linear_model
-import pickle
-import os
+from loadData import load_data
 
 UPPER_BOUND = 1
 LOWER_BOUND = 0
@@ -29,15 +28,9 @@ y = np.array(data[predict])
 x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(x, y, test_size = 0.1)
 
 # Retrieve network objects from networks folder
-models = []
-for root, dirs, files, in os.walk("networks"):
-    for file in files:
-        if file.endswith(".pickle"):
-            print(file)
-            pickle_in = open(("networks/"+file), "rb")
-            models.append(pickle.load(pickle_in))
+models = load_data()
 
-predictions = models[1].predict(x_test)
+predictions = models[0].predict(x_test)
 print(predictions)
 
 # Create objective function
