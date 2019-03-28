@@ -10,6 +10,7 @@ import numpy as np
 import sklearn
 from sklearn import linear_model
 from loadData import load_data
+from ensembleFitness import ensemble_fitness
 
 UPPER_BOUND = 1
 LOWER_BOUND = 0
@@ -29,9 +30,6 @@ x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(x, y
 
 # Retrieve network objects from networks folder
 models = load_data()
-
-predictions = models[0].predict(x_test)
-print(predictions)
 
 # Create objective function
 
