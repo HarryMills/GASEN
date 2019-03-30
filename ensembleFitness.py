@@ -3,22 +3,13 @@ def ensemble_fitness(weights, models, inputs, targets, value):
     import sklearn
     from sklearn import linear_model
     from sklearn import metrics
+    from weightedEnsemble import weighted_ensemble
 
     # Calculate weights in correct format
     weights = [x / sum(weights) for x in weights]
 
-    # Assigning empty array to store 2D array of model predictions
-    predictions = []
-
-    # Loop through all models
-    for i in range(len(models)):
-        # Make predictions for each model
-        predictions.append(models[i].predict(inputs))
-        # Multiply prediction by corresponding weight
-        predictions[i] = [x * weights[i] for x in predictions[i]]
-
-    # Sum of weighted predictions
-    predictionsSum = [sum(x) for x in zip(*predictions)]
+    # Call function to get weighted ensemble predictions
+    predictionsSum = weighted_ensemble(weights, models, inputs)
 
     # Calculating bias and variance for use in error if selected
     bias = (np.mean(predictionsSum)-np.mean(targets))**2

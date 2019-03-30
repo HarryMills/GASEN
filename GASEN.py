@@ -8,9 +8,12 @@
 import pandas as pd
 import numpy as np
 import sklearn
+import matplotlib.pyplot as pyplot
 from sklearn import linear_model
+
 from loadData import load_data
 from ensembleFitness import ensemble_fitness
+from weightedEnsemble import weighted_ensemble
 
 UPPER_BOUND = 1
 LOWER_BOUND = 0
@@ -43,3 +46,6 @@ results = ensemble_fitness(weights, models, x_test, y_test, 'mse')
 # Return weights
 
 # Display optimised network ensemble accuracy details
+results = weighted_ensemble(weights, models, x_test)
+pyplot.scatter(results, y_test)
+pyplot.show()
