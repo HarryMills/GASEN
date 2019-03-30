@@ -3,16 +3,17 @@ def ensemble_fitness(weights, models, inputs, targets, value):
     import sklearn
     from sklearn import linear_model
 
-    weights = weights/sum(weights)
+    weights = [x / sum(weights) for x in weights]
+
+    predictions = []
 
     # Loop through all networks
     for i in range(len(models)):
-        print(models[i])
-        # predictions = models[i].predict(inputs)
-
-    # Weighted prediction for each network
+        predictions.append(models[i].predict(inputs))
+        predictions[i] = [x * weights[i] for x in predictions[i]]
 
     # Sum of weighted predictions
+    predictionsFull = [sum(x) for x in zip(*predictions)]
 
     # Calculate fitness values
     bias = (np.mean(predictions)-np.mean(targets))**2
