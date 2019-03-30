@@ -20,27 +20,24 @@ def ensemble_fitness(weights, models, inputs, targets, value):
     # Sum of weighted predictions
     predictionsSum = [sum(x) for x in zip(*predictions)]
 
-    # Calculate predictions metrics
+    # Calculating bias and variance for use in error if selected
     bias = (np.mean(predictionsSum)-np.mean(targets))**2
     variance = np.var(predictionsSum-targets)
-    error = bias+variance
-    mse = metrics.mean_squared_error(predictionsSum, targets)
-    mae = metrics.mean_absolute_error(predictionsSum, targets)
 
     # Setting output fitness value
     if value == "mse":
-        ensembleFit = mse
+        ensembleFit = metrics.mean_squared_error(predictionsSum, targets)
     elif value == "mae":
-        ensembleFit = mae
+        ensembleFit = metrics.mean_absolute_error(predictionsSum, targets)
     elif value == "bias":
         ensembleFit = bias
     elif value == "variance":
         ensembleFit = variance
     elif value == "error":
-        ensembleFit = error
+        ensembleFit = bias+variance
     else:
         # If error with input then set it to mse as default
-        ensembleFit = mse
+        ensembleFit = metrics.mean_squared_error(predictionsSum, targets)
 
     # Returning fitness value to minimise
     return ensembleFit
