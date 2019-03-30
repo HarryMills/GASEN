@@ -26,12 +26,15 @@ predict = "G3"
 x = np.array(data.drop([predict], 1))
 y = np.array(data[predict])
 
-x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(x, y, test_size = 0.1)
+x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(x, y, test_size=0.1)
 
 # Retrieve network objects from networks folder
 models = load_data()
 
+weights = [1, 2, 3, 4]
+
 # Create objective function
+results = ensemble_fitness(weights, models, x_test, y_test, 'mse')
 
 # Set Genetic Algorithm parameters
 
