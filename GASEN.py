@@ -14,6 +14,7 @@ from sklearn import linear_model
 from loadData import load_data
 from ensembleFitness import ensemble_fitness
 from weightedEnsemble import weighted_ensemble
+import GA
 
 UPPER_BOUND = 1
 LOWER_BOUND = 0
@@ -37,11 +38,12 @@ models = load_data()
 weights = [1, 2, 3, 4]
 
 # Create objective function
-results = ensemble_fitness(weights, models, x_test, y_test, 'mse')
+objective_function = lambda w: ensemble_fitness(w, models, x_test, y_test, 'mse')
 
 # Set Genetic Algorithm parameters
 
 # Run Genetic Algorithm to optimise objective function
+parent_, fitness_, history = GA.genetic_algorithm(weights, objective_function)
 
 # Return weights
 
