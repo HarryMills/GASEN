@@ -5,30 +5,34 @@ def ensemble_fitness(weights, models, inputs, targets, value):
     from sklearn import metrics
     from weightedEnsemble import weighted_ensemble
 
-    # Calculate weights in correct format
-    weights = [x / sum(weights) for x in weights]
+    fitness = []
 
-    # Call function to get weighted ensemble predictions
-    predictionsSum = weighted_ensemble(weights, models, inputs)
+    # Normalise weights
+    weights = sklearn.preprocessing.normalize(weights, axis=1, norm='l1')
 
-    # Calculating bias and variance for use in error if selected
-    bias = (np.mean(predictionsSum)-np.mean(targets))**2
-    variance = np.var(predictionsSum-targets)
+    for i in range(len(weights)):
+        predictionsSum = weighted_ensemble(weights[i-1], models, inputs)
 
-    # Setting output fitness value
-    if value == "mse":
-        ensembleFit = metrics.mean_squared_error(predictionsSum, targets)
-    elif value == "mae":
-        ensembleFit = metrics.mean_absolute_error(predictionsSum, targets)
-    elif value == "bias":
-        ensembleFit = bias
-    elif value == "variance":
-        ensembleFit = variance
-    elif value == "error":
-        ensembleFit = bias+variance
-    else:
-        # If error with input then set it to mse as default
-        ensembleFit = metrics.mean_squared_error(predictionsSum, targets)
+        # Calculating bias and variance for use in error if selected
+        bias = (np.mean(predictionsSum)-np.mean(targets))**2
+        variance = np.var(predictionsSum-targets)
+
+        # Setting output fitness value
+        if value == "mse":
+            ensembleFit = metrics.mean_squared_error(predictionsSum, targets)
+        elif value == "mae":
+            ensembleFit = metrics.mean_absolute_error(predictionsSum, targets)
+        elif value == "bias":
+            ensembleFit = bias
+        elif value == "variance":
+            ensembleFit = variance
+        elif value == "error":
+            ensembleFit = bias+variance
+        else:
+            # If error with input then set it to mse as default
+            ensembleFit = metrics.mean_squared_error(predictionsSum, targets)
+
+        fitness.append(ensembleFit)
 
     # Returning fitness value to minimise
-    return ensembleFit
+    return fitness
