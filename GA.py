@@ -11,7 +11,7 @@ def select_mating_pool(pop, fitness, num_parents):
     # #generation.
     parents = np.empty((num_parents, pop.shape[1]))
     for parent_num in range(num_parents):
-        max_fitness_idx = np.where(fitness == np.max(fitness))
+        max_fitness_idx = np.where(fitness == np.min(fitness))
         max_fitness_idx = max_fitness_idx[0][0]
         parents[parent_num, :] = pop[max_fitness_idx, :]
         fitness[max_fitness_idx] = -99999999999
@@ -40,5 +40,6 @@ def mutation(offspring_crossover):
     for idx in range(offspring_crossover.shape[0]):
         # The random value to be added to the gene.
         random_value = np.random.uniform(0, 1, 1)
-        offspring_crossover[idx, 4] = offspring_crossover[idx, 4] + random_value
+        offspring_crossover[idx-1, offspring_crossover.shape[0]-1] = \
+            offspring_crossover[idx-1, offspring_crossover.shape[0]-1] + random_value
     return offspring_crossover

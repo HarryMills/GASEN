@@ -48,7 +48,7 @@ pop_size = (sol_per_pop, len(models))
 new_population = np.random.uniform(low=0, high=1, size=pop_size)
 print(new_population)
 
-num_generations = 5
+num_generations = 100
 
 for generation in range(num_generations):
     print("Generation: ", generation)
@@ -74,8 +74,9 @@ for generation in range(num_generations):
 # Get the best solution after all generations
 fitness = GA.cal_pop_fitness(objective_function, new_population)
 # Return the index of that solution and corresponding best fitness
-best_match_idx = np.where(fitness == np.max(fitness))
-
+best_match_idx = np.where(fitness == np.min(fitness))
+print(best_match_idx)
+print(fitness)
 # Return weights
 
 # Display optimised network ensemble accuracy details
