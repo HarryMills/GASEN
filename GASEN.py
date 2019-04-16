@@ -35,19 +35,50 @@ x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(x, y
 # Retrieve network objects from networks folder
 models = load_data()
 
-weights = [1, 2, 3, 4]
-
 # Create objective function
 objective_function = lambda w: ensemble_fitness(w, models, x_test, y_test, 'mse')
 
 # Set Genetic Algorithm parameters
+sol_per_pop = 8
+num_parents_mating = 4
 
-# Run Genetic Algorithm to optimise objective function
-parent_, fitness_, history = GA.genetic_algorithm(weights, objective_function)
+# Defining population size
+pop_size = (sol_per_pop, len(models))
+# Creating the initial population
+new_population = np.random.uniform(low=0, high=1, size=pop_size)
+print(new_population)
+
+num_generations = 5
+
+for generation in range(num_generations):
+    print("Generation: ", generation)
+    # Measuring the fitness of each chromosome in the population
+    fitness = GA.cal_pop_fitness(objective_function, new_population)
+
+    # Selecting the best parents in the population for mating
+    parents = GA.select_mating_pool(new_population, fitness, num_parents_mating)
+
+    # Generating next generation using crossover
+    offspring_crossover = GA.crossover(parents, offspring_size=(pop_size[0]-parents.shape[0], len(models)))
+
+    # Adding some variations to the offspring using mutation
+    offspring_mutation = GA.mutation(offspring_crossover)
+
+    # Creating the new population based on the parents and offspring
+    new_population[0:parents.shape[0], :] = parents
+    new_population[parents.shape[0]:, :] = offspring_mutation
+
+    # The best result in the current iteration
+    print("NOTHING")
+
+# Get the best solution after all generations
+fitness = GA.cal_pop_fitness(objective_function, new_population)
+# Return the index of that solution and corresponding best fitness
+best_match_idx = np.where(fitness == np.max(fitness))
 
 # Return weights
 
 # Display optimised network ensemble accuracy details
-results = weighted_ensemble(weights, models, x_test)
-pyplot.scatter(results, y_test)
-pyplot.show()
+# results = weighted_ensemble(weights, models, x_test)
+# pyplot.scatter(results, y_test)
+# pyplot.show()
